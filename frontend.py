@@ -17,6 +17,9 @@ app = Flask(__name__)
 
 @app.route('/api/', methods=['POST'])
 def render_collage():
+    TOKEN = os.getenv("TOKEN")
+    SECRET = os.getenv("SECRET")
+
     params = request.get_json()
     r = requests.post("https://accounts.spotify.com/api/token", data={'grant_type': "client_credentials", 'client_id': TOKEN, 'client_secret': SECRET,})
     header = {'Authorization': f"Bearer {r.json()['access_token']}"}
