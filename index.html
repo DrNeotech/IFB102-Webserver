@@ -39,17 +39,17 @@
             <br><br>
 
             <label>Whether to count frequency of albums or artists for the image:</label><br>
-            <input type="radio" id="count1" name="count" onChange="groupBy(1)" checked><label for="count1"> Artists</label>
+            <input type="radio" id="count1" name="count" onChange="groupBy(1)" value="artist" checked><label for="count1"> Artists</label>
             <br>
-            <input type="radio" id="count2" name="count" onChange="groupBy(0)"><label for="count2"> Albums</label>
+            <input type="radio" id="count2" name="count" onChange="groupBy(0)" value="album"><label for="count2"> Albums</label>
 
             <br><br>
 
             <label for="img-source">Source of tile image:</label>
             <br>
-            <input type="radio" id="source1" name="img-source"><label for="source1"> Albums (most frequent)</label>
+            <input type="radio" id="source1" name="img-source" value="album"><label for="source1"> Albums (most frequent)</label>
             <br>
-            <input type="radio" id="source2" name="img-source" checked><label for="source2" id="artists-radio"> Artist Images</label>
+            <input type="radio" id="source2" name="img-source" value="artist" checked><label for="source2" id="artists-radio"> Artist Images</label>
 
             <br><br>
 
@@ -97,17 +97,22 @@
                 minimum: params[3].value
             };
 
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        console.log("Success:", xhr.responseText);
-                    } else {
-                        console.error("Error:", xhr.status, xhr.responseText);
-                    }
-                }
-            };
-
-            xhr.send(JSON.stringify(data));
+            fetch("/api", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                const imgEl = document.getElementById("result-image");
+                imgEl.src = `data:image/png;base64,${result.image}`;
+                imgEl.style.display = "block";
+            })
+            .catch(err => {
+                console.error("Error:", err);
+            });            
         }
     </script>
 
