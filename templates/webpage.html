@@ -91,7 +91,7 @@
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
             var data = {
-                playlist: playlist_id,
+                playlist: params[0].value,
                 group_by: params[1].value,
                 image_source: params[2].value,
                 minimum: params[3].value
