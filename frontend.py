@@ -1,17 +1,12 @@
-from flask import Flask, render_template, request
-import requests
-import backend
+from flask import Flask, request, jsonify
+import imageGenerator
 
 app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return render_template('webpage.html')
 
 @app.route('/api', methods=['POST'])
 def render_collage():
     print(request.get_json())
-    return 'wawa'
+    return jsonify({"status": "success", "message": "Got data!"})
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=3000)
+    app.run(host='0.0.0.0', port=5000)
