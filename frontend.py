@@ -8,10 +8,10 @@ app = Flask(__name__)
 def home():
     return render_template('webpage.html')
 
-"""@app.route('/', methods=['POST'])
+@app.route('/api', methods=['POST'])
 def render_collage():
     print(request.get_json())
-    return 'wawa'"""
+    return 'wawa'
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=3000)
