@@ -129,7 +129,7 @@ def render_collage():
 
     buffer = BytesIO()
 
-    img.save(buffer, format='PNG')
+    canvas.save(buffer, format='PNG')
     buffer.seek(0)
 
     img_base64 = base64.b64encode(buffer.read()).decode('utf-8')
