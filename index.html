@@ -89,10 +89,6 @@
 
             //var playlist_id = playlist_url.match(/\/playlist\/([a-zA-Z0-9]+)/)[1];
 
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "/api/", true);
-            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
             var data = {
                 playlist: params[0].value,
                 group_by: params[1].value,
@@ -100,7 +96,7 @@
                 minimum: params[3].value
             };
 
-            fetch("/api", {
+            fetch("/api/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
