@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            background-color: rgb(20, 93, 17);
+        }
+
+        .mainText {
+            color: rgb(219, 238, 255)
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mainText">
+        <h1>Spotify Playlist Collage</h1>
+        <p>Generates an image for a Spotify playlist using a treemap-like structure to visualise the
+            most frequent artists.
+        </p>
+        <img
+            src="https://media.discordapp.net/attachments/1231462937676222507/1374040134936297694/tmp5ejdo2v3.PNG?ex=68308e98&is=682f3d18&hm=f453bf5838005ce1a2200e97f8fc6816f60f73012bd7b53735daaa1d2377fad0&=&format=webp&quality=lossless&width=250&height=250">
+        <img
+            src="https://media.discordapp.net/attachments/1231462937676222507/1374637015076704267/tmptluyoqk9.PNG?ex=6830177b&is=682ec5fb&hm=389f13db1071679c84a9f24ef97ae13cbf2d06d4313c53961daf77ae71aafb40&=&format=webp&quality=lossless&width=250&height=250">
+        <br>
+        <small>Two example images from my friend's playlist and my own respectively. </small>
+    </div>
+    
+    <br><br>
+
+    <form name="paramsForm">
+        <fieldset class="mainText" id="params">
+            <legend>Parameters</legend>
+
+            <label>Playlist URL:</label><br>
+            <input type="text">
+
+            <br><br>
+
+            <label>Whether to count frequency of albums or artists for the image:</label><br>
+            <input type="radio" id="count1" name="count" onChange="groupBy(1)" checked><label for="count1"> Artists</label>
+            <br>
+            <input type="radio" id="count2" name="count" onChange="groupBy(0)"><label for="count2"> Albums</label>
+
+            <br><br>
+
+            <label for="img-source">Source of tile image:</label>
+            <br>
+            <input type="radio" id="source1" name="img-source"><label for="source1"> Albums (most frequent)</label>
+            <br>
+            <input type="radio" id="source2" name="img-source" checked><label for="source2" id="artists-radio"> Artist Images</label>
+
+            <br><br>
+
+            <label for="minimum">The minimum number of songs for an <span id="min-option-text">album</span> to be
+                included
+                (lower values will produce a better image): </label><br>
+            <input type="number" id="minimum" name="minimum-songs" min="1" value="1">
+            <br><br>
+            <button type="button" onclick="getParameters()">Generate Image</button>
+
+
+        </fieldset>
+    </form>
+    <script>
+        function imageSourceSelect(selection) {
+            document.getElementById("min-option-text").innerText = selection;
+        }
+
+        function groupBy(group) {
+            if (group == 0) {
+                document.getElementById("source2").disabled = true;
+                document.getElementById("artists-radio").innerHTML = " <s>Artist Images</s>";
+                document.getElementById("source1").checked = true;
+            } else {
+                document.getElementById("source2").disabled = false;
+                document.getElementById("artists-radio").innerHTML = " Artist Images";
+            }
+        }
+
+        function getParameters() {
+            var params = document.forms['paramsForm'].querySelectorAll('#params > input:not([type="radio"]), #params > input[type="radio"]:checked');
+            
+            //var playlist_url = params[0].value;
+
+            //var playlist_id = playlist_url.match(/\/playlist\/([a-zA-Z0-9]+)/)[1];
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "", true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+            var data = {
+                playlist: playlist_id,
+                group_by: params[1].value,
+                image_source: params[2].value,
+                minimum: params[3].value
+            };
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        console.log("Success:", xhr.responseText);
+                    } else {
+                        console.error("Error:", xhr.status, xhr.responseText);
+                    }
+                }
+            };
+
+            xhr.send(JSON.stringify(data));
+        }
+    </script>
+
+</body>
+
+</html>
