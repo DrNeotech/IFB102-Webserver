@@ -81,7 +81,7 @@ def render_collage():
 
     counts = [data["Count"]**2 for data in artists.values()]
 
-    square_width = int(np.ceil(np.sqrt(sum(counts)))) - attempt
+    square_width = int(np.ceil(np.sqrt(sum(counts))))
     grid = np.zeros([square_width, square_width], dtype=object)
 
     placements = []
