@@ -3,7 +3,7 @@ import imageGenerator
 
 app = Flask(__name__)
 
-@app.route('/api', methods=['POST'])
+@app.route('/api/', methods=['POST'])
 def render_collage():
     print(request.get_json())
     return jsonify({"status": "success", "message": "Got data!"})
