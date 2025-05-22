@@ -58,13 +58,16 @@
                 (lower values will produce a better image): </label><br>
             <input type="number" id="minimum" name="minimum-songs" min="1" value="1">
             <br><br>
+            <label for="size">Size of tiles (in pixels):</label><br>
+            <input type="number" id="size" name="size" min="1" value="1">
+            <br><br>
             <button type="button" onclick="getParameters()">Generate Image</button>
 
 
         </fieldset>
     </form>
 
-    <img id="result-image" style="display:none;" width="250" height="250" />
+    <img id="result-image"/>
 
     <script>
         function imageSourceSelect(selection) {
@@ -93,7 +96,8 @@
                 playlist: params[0].value,
                 group_by: params[1].value,
                 image_source: params[2].value,
-                minimum: params[3].value
+                minimum: params[3].value,
+                tile_size: params[4].value
             };
 
             fetch("/api/", {

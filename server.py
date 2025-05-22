@@ -29,7 +29,7 @@ def render_collage():
     image_source = params["image_source"]
     group_by = params["group_by"]
 
-    min_songs = params["minimum"]
+    min_songs = int(params["minimum"])
 
     session = FuturesSession()
     s = requests.Session()
@@ -112,7 +112,7 @@ def render_collage():
 
     accuracy = np.count_nonzero(grid)/grid.size
 
-    tile_px = 50
+    tile_px = int(params["tile_size"])
 
     canvas_px = square_width * tile_px
     canvas = Image.new("RGB", (canvas_px, canvas_px), color=(0, 0, 0))
@@ -128,6 +128,7 @@ def render_collage():
             print(f"Failed to load image for {artist}: {e}")
 
     buffer = BytesIO()
+
     img.save(buffer, format='PNG')
     buffer.seek(0)
 
