@@ -11,7 +11,6 @@ from requests_futures.sessions import FuturesSession
 from concurrent.futures import as_completed
 from dotenv import load_dotenv
 import os
-import click
 
 load_dotenv()
 
@@ -30,23 +29,13 @@ def main(playlist, min_songs, image_source, group_by):
 
     url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
 
-    t1 = timeit.default_timer()
-
     songRequest = session.get(url, params={"fields":"total"}, headers=header).result()
-
-    if songRequest.status_code == 401:
-        print("Getting new auth code")
-        songRequest = session.get(url, params={"fields":"total"}, headers=header).result()
-
-    t2 = timeit.default_timer()
 
     playlistLength = songRequest.json()["total"]
 
     futures = [ session.get(url, params={"limit":50, "offset":i*50, "fields":"items(track(artists(name, id, href), album(name, images))"}, headers=header) for i in range(playlistLength//50+1) ]
 
     track_list = list(chain.from_iterable([future.result().json()["items"] for future in as_completed(futures)]))
-
-    t3 = timeit.default_timer()
 
     artist_dict = defaultdict(lambda: {"Count": 0, "Image": []})
 
@@ -92,8 +81,6 @@ def main(playlist, min_songs, image_source, group_by):
 
     print(square_width)
 
-    t5 = timeit.default_timer()
-
     tile_px = 50
 
     canvas_px = square_width * tile_px
@@ -109,17 +96,7 @@ def main(playlist, min_songs, image_source, group_by):
         except Exception as e:
             print(f"Failed to load image for {artist}: {e}")
 
-    canvas.show()
-
-    t6 = timeit.default_timer()
-
-    print(f"Got Auth Code in {t2-t1}s")
-    print(f"Got Track List in {t3-t2}s")
-    print(f"Got the Artist Dict in {t4-t3}s")
-    print(f"Generated Grid in {t5-t4}s")
-    print(f"Generated Image in {t6-t5}s")
-    print(f"Total Time: {t6-t1}s")
-
+    #canvas.show()
 
 def placing(artists, image_source, min_missing, attempt=0):
     counts = [data["Count"]**2 for data in artists.values()]
